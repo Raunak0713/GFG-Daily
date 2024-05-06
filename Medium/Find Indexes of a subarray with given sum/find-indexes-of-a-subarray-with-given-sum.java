@@ -37,30 +37,19 @@ class Main{
 
 
 class Solution{
-    public ArrayList<Integer> subarraySum(int[] arr, int n, int s) {
-        int start = 0;
-        int end = 0;
-        ArrayList<Integer> ans = new ArrayList<>();
-        int sum = 0;
-
-        while (end < n) {
-            sum = sum + arr[end];
-
-            while (sum > s && start <= end) {
-                sum = sum - arr[start];
-                start++;
+    static ArrayList<Integer> subarraySum(int[] arr, int n, int s) {
+        int l = 0;
+        int r = 0;
+        int cs = 0;
+        for(;r<n;r++){
+            cs += arr[r];
+            for(;cs>s&&l<r;l++){
+                cs-=arr[l];
             }
-
-            if (sum == s && start <= end) {
-                ans.add(start + 1);
-                ans.add(end + 1);
-                return ans;
+            if(cs==s){
+                return new ArrayList<>(Arrays.asList(l+1,r+1));
             }
-
-            end++;
         }
-
-        ans.add(-1);
-        return ans;
+        return new ArrayList<>(Arrays.asList(-1));
     }
 }
