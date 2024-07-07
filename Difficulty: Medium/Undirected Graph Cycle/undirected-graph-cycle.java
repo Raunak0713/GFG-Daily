@@ -37,7 +37,7 @@ class Solution {
         boolean[] vis = new boolean[V];
         for(int i=0; i<V; i++){
             if(!vis[i]){
-                if(HasCycle(adj, vis, i, -1)){
+                if(HasCycle(adj, vis, i)){
                     return true;
                 }
             }
@@ -45,17 +45,23 @@ class Solution {
         }
         return false;
     }
-    public boolean HasCycle(ArrayList<ArrayList<Integer>> adj, boolean[] vis, int u, int parent){
+    public boolean HasCycle(ArrayList<ArrayList<Integer>> adj, boolean[] vis, int u){
+        Queue<int []> queue = new LinkedList<>();
+        queue.add(new int[]{u, -1});
         vis[u] = true;
-        for(int a : adj.get(u)){
-            if(a == parent){
-                continue;
-            }
-            if(vis[a]){
-                return true;
-            }
-            if(HasCycle(adj, vis, a, u)){
-                return true;
+        
+        while(!queue.isEmpty()){
+            int[] node = queue.poll();
+            int source = node[0];
+            int parent = node[1];
+            
+            for(int v : adj.get(source)){
+                if(!vis[v]){
+                    vis[v] = true;
+                    queue.add(new int[]{v, source});
+                }else if(v != parent){
+                    return true;
+                }
             }
         }
         return false;
