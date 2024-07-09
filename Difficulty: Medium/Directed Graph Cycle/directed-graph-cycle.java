@@ -32,31 +32,35 @@ class DriverClass {
 /*Complete the function below*/
 
 class Solution {
-    
     public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
-        boolean[] vis = new boolean[V];
-        boolean[] inRecursion = new boolean[V];
+        Queue<Integer> queue = new LinkedList<>();
+        ArrayList<Integer> ans = new ArrayList<>();
+        int[] InDegree = new int[V];
         
         for(int i=0; i<V; i++){
-            if(!vis[i] && Check(adj, vis, inRecursion, i)){
-                return true;
+            for(int v : adj.get(i)){
+                InDegree[v]++;
             }
         }
-        return false;
-    }
-    
-    public boolean Check(ArrayList<ArrayList<Integer>> adj, boolean[] vis, boolean[] inRecursion, int u){
-        vis[u] = true;
-        inRecursion[u] = true;
-        for(int v : adj.get(u)){
-            if(!vis[v] && Check(adj, vis, inRecursion, v)){
-                return true;
-            }
-            if(vis[v] && inRecursion[v]){
-                return true;
+        
+        for(int i=0; i<V; i++){
+            if(InDegree[i] == 0){
+                queue.add(i);
             }
         }
-        inRecursion[u] = false;
-        return false;
+        
+        while(!queue.isEmpty()){
+            int u = queue.poll();
+            ans.add(u);
+            
+            for(int v : adj.get(u)){
+                InDegree[v]--;
+                if(InDegree[v] == 0){
+                    queue.add(v);
+                }
+            }
+        }
+        
+        return ans.size() != V;
     }
 }
