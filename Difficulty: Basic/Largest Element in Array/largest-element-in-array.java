@@ -48,12 +48,6 @@ class GFG {
 
 class Solution {
     public static int largest(int n, int[] arr) {
-        int a = arr[0];
-        for(int b : arr){
-            if(b > a){
-                a = b;
-            }
-        }
-        return a;
+        return Arrays.stream(arr).max().getAsInt();
     }
 }
