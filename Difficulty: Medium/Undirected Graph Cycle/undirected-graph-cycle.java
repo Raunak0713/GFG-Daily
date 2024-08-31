@@ -31,45 +31,29 @@ class GFG {
 }
 // } Driver Code Ends
 
-class Pair{
-    int first;
-    int second;
-    public Pair(int first, int second){
-        this.first = first;
-        this.second = second;
-    }
-}
 
 class Solution {
     public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
         boolean[] visited = new boolean[V];
         for(int i=0; i<V; i++){
             if(!visited[i]){
-                if(BFS_Helper(i, visited, -1, adj)){
+                if(DFS_Helper(i, visited, -1, adj)){
                     return true;
                 }
             }
         }
         return false;
     }
-    public boolean BFS_Helper(int vertex, boolean[] vis, int parent, ArrayList<ArrayList<Integer>> adj){
-        Queue<Pair> queue = new LinkedList<>();
-        queue.add(new Pair(vertex, parent));
-        vis[vertex] = true;
-        
-        while(!queue.isEmpty()){
-            Pair current = queue.poll();
-            int currentVertex = current.first;
-            int currentParent = current.second;
-            
-            for(int edge : adj.get(currentVertex)){
-                if(!vis[edge]){
-                    queue.add(new Pair(edge, currentVertex));
-                    vis[edge] = true;
-                }
-                else if(edge != currentParent){
+    public boolean DFS_Helper(int vertex, boolean[] visited, int parent, ArrayList<ArrayList<Integer>> adj){
+        visited[vertex] = true;
+        for(int edge : adj.get(vertex)){
+            if(!visited[edge]){
+                if(DFS_Helper(edge, visited, vertex, adj)){
                     return true;
                 }
+            }
+            else if(edge != parent){
+                return true;
             }
         }
         return false;
